@@ -1,4 +1,4 @@
-package com.softserve.itacademy.authmicroservice.model;
+package com.igorkucher.authmicroservice.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;

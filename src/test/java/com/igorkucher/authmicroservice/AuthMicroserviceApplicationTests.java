@@ -1,4 +1,4 @@
-package com.softserve.itacademy.authmicroservice;
+package com.igorkucher.authmicroservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

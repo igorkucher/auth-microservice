@@ -5,10 +5,10 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.6.13</version>
+		<version>2.7.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.softserve.itacademy</groupId>
+	<groupId>com.igorkucher</groupId>
 	<artifactId>auth-microservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>AuthMicroservice</name>
@@ -25,7 +25,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
-			<version>2.7.5</version>
 		</dependency>
 
 		<dependency>
@@ -55,7 +54,6 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
-			<version>5.7.3</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
