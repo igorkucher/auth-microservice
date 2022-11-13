@@ -25,23 +25,14 @@ public class User {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    //    @Pattern(regexp = "(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}",
-//            message = "Must be minimum 6 characters, at least one letter and one number")
+    @Pattern(regexp = "(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}",
+            message = "Must be minimum 6 characters, at least one letter and one number")
     @Column(name = "password", nullable = false)
     private String password;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
-
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
-    private List<ToDo> myTodos;
-
-    @ManyToMany
-    @JoinTable(name = "todo_collaborator",
-            joinColumns = @JoinColumn(name = "collaborator_id"),
-            inverseJoinColumns = @JoinColumn(name = "todo_id"))
-    private List<ToDo> otherTodos;
 
     public User() {
     }
@@ -99,22 +90,6 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
-    }
-
-    public List<ToDo> getMyTodos() {
-        return myTodos;
-    }
-
-    public void setMyTodos(List<ToDo> myTodos) {
-        this.myTodos = myTodos;
-    }
-
-    public List<ToDo> getOtherTodos() {
-        return otherTodos;
-    }
-
-    public void setOtherTodos(List<ToDo> todos) {
-        this.otherTodos = todos;
     }
 
     public String getUsername() {
