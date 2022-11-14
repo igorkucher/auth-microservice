@@ -5,7 +5,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collections;
 
-public class JwtUserFactory {
+public final class JwtUserFactory {
 
     public JwtUserFactory() {}
 
