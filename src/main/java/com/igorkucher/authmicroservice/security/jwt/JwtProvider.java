@@ -1,10 +1,13 @@
 package com.igorkucher.authmicroservice.security.jwt;
 
+import com.igorkucher.authmicroservice.model.Role;
+import com.igorkucher.authmicroservice.model.User;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,6 +28,9 @@ public class JwtProvider {
 
     @Value("${jwt.token.expired}")
     private long validityInMilliseconds;
+
+    @Value("${authmicroservice.jwtCookieName}")
+    private String jwtCookie;
     public static final String AUTHORIZATION = "Authorization";
     public static final String BEARER = "Bearer_";
 
@@ -41,19 +47,17 @@ public class JwtProvider {
         jwtSecret = Base64.getEncoder().encodeToString(jwtSecret.getBytes());
     }
 
-    public String generateToken(String login) {
-        Claims claims = Jwts.claims().setSubject(login);
-//        claims.put("role", jwtUserDetailsService.loadUserByUsername(login).getAuthorities().stream().findFirst().get().toString());
+    public String generateToken(String username, Role role) {
+        Claims claims = Jwts.claims().setSubject(username);
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
-
+        claims.put("role", role);
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(validity)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
-
     }
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(getLoginFromToken(token));
@@ -71,12 +75,7 @@ public class JwtProvider {
     public boolean validateToken(String token) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
-
-            if (claims.getBody().getExpiration().before(new Date())) {
-                return false;
-            }
-
-            return true;
+            return !claims.getBody().getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
             throw new JwtAuthenticationException("JWT token is expired or invalid");
         }
@@ -99,5 +98,10 @@ public class JwtProvider {
             return bearerToken.substring(BEARER.length());
         }
         return null;
+    }
+
+    public ResponseCookie generateJwtCookie(User user) {
+        String jwt = generateToken(user.getUsername(), user.getRole());
+        return ResponseCookie.from(jwtCookie, jwt).path("/api").maxAge(24 * 60 * 60).httpOnly(true).build();
     }
 }
