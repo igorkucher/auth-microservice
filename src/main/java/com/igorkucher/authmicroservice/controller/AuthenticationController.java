@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,11 +27,17 @@ public class AuthenticationController {
     private AuthenticationManager authenticationManager;
     private JwtProvider jwtProvider;
 
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
-    public AuthenticationController(UserService userService, AuthenticationManager authenticationManager, JwtProvider jwtProvider) {
+    public AuthenticationController(UserService userService,
+                                    AuthenticationManager authenticationManager,
+                                    JwtProvider jwtProvider,
+                                    PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.jwtProvider = jwtProvider;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/signin")
@@ -47,4 +54,6 @@ public class AuthenticationController {
                 .body(new UserResponse(user.getId(), user.getEmail(),
                         user.getFirstName(), user.getLastName(), user.getRole()));
     }
+
+
 }

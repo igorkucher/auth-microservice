@@ -17,28 +17,21 @@ import java.util.Optional;
 @Service("userServiceImpl")
 @Slf4j
 public class UserServiceImpl implements UserService {
-    @Autowired
     private UserRepository userRepository;
-    @Autowired
     private RoleRepository roleRepository;
-    private BCryptPasswordEncoder passwordEncoder;
-
-//    @Autowired
-//    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
-//        this.userRepository = userRepository;
-//        this.roleRepository = roleRepository;
-//    }
 
     @Autowired
-    public void setPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
+
+
 
     @Override
     public User create(User user) {
         Role role = roleRepository.findByName("ROLE_USER");
         user.setRole(role);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
