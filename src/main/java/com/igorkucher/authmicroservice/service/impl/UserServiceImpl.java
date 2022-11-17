@@ -7,7 +7,7 @@ import com.igorkucher.authmicroservice.repository.UserRepository;
 import com.igorkucher.authmicroservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,14 +17,20 @@ import java.util.Optional;
 @Service("userServiceImpl")
 @Slf4j
 public class UserServiceImpl implements UserService {
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
     private RoleRepository roleRepository;
-    private PasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder passwordEncoder;
+
+//    @Autowired
+//    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+//        this.userRepository = userRepository;
+//        this.roleRepository = roleRepository;
+//    }
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
+    public void setPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -72,30 +78,4 @@ public class UserServiceImpl implements UserService {
         return users.isEmpty() ? new ArrayList<>() : users;
     }
 
-    /*@Override
-    public boolean saveUser(UserRequest userRequest) {
-        User user = new User();
-        user.setRole(roleRepository.getOne(2L));
-        user.setEmail(userRequest.getLogin());
-        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-        return (userRepository.save(user) != null);
-    }
-
-    @Override
-    public UserResponse findByLoginAndPassword(UserRequest userRequest) {
-        UserResponse userResponse = null;
-        User user = userRepository.getUserByEmail(userRequest.getLogin());
-        if((user != null) && (passwordEncoder.matches(userRequest.getPassword(), user.getPassword()))) {
-            userResponse = new UserResponse();
-            userResponse.setLogin(userRequest.getLogin());
-            userResponse.setPassword(userRequest.getPassword());
-        }
-        return userResponse;
-    }
-
-    @Override
-    public boolean matchPassword(UserRequest userRequest) {
-        User user = userRepository.getUserByEmail(userRequest.getLogin());
-        return passwordEncoder.matches(userRequest.getPassword(), user.getPassword());
-    }*/
 }

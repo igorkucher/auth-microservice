@@ -13,7 +13,6 @@ public class JwtUserDetails implements UserDetails {
     private String lastName;
     private String email;
     private String password;
-    private Date lastPasswordResetDate;
     private Collection<? extends GrantedAuthority> authorities;
 
     public JwtUserDetails(Long id, String firstName, String lastName, String email, String password,
@@ -25,6 +24,7 @@ public class JwtUserDetails implements UserDetails {
         this.password = password;
         this.authorities = authorities;
     }
+
 
     @JsonIgnore
     public Long getId() {return id;}
@@ -65,13 +65,6 @@ public class JwtUserDetails implements UserDetails {
         return true;
     }
 
-    public Date getLastPasswordResetDate() {
-        return lastPasswordResetDate;
-    }
-
-    public void setLastPasswordResetDate(Date lastPasswordResetDate) {
-        this.lastPasswordResetDate = lastPasswordResetDate;
-    }
 
     public String getFirstName() {
         return firstName;

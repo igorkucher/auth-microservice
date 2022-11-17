@@ -14,13 +14,13 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-@Component
 @Slf4j
 public class JwtFilter extends GenericFilterBean {
+
     private JwtProvider jwtProvider;
 
     @Autowired
-    public JwtFilter(JwtProvider jwtProvider) {
+    public void setJwtProvider(JwtProvider jwtProvider) {
         this.jwtProvider = jwtProvider;
     }
 

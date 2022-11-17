@@ -34,13 +34,17 @@ public class JwtProvider {
     public static final String AUTHORIZATION = "Authorization";
     public static final String BEARER = "Bearer_";
 
-    @Autowired
     private JwtUserDetailsService jwtUserDetailsService;
 
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
+    @Autowired
+    public void setJwtUserDetailsService(JwtUserDetailsService jwtUserDetailsService) {
+        this.jwtUserDetailsService = jwtUserDetailsService;
     }
+
+//    @Bean
+//    public BCryptPasswordEncoder passwordEncoder(){
+//        return new BCryptPasswordEncoder();
+//    }
 
     @PostConstruct
     protected void init() {
